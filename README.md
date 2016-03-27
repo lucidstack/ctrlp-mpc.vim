@@ -8,7 +8,7 @@ so...why not ~~Zoidberg~~ ctrlp?
 
 ## Installation
 
-Knock yourself out and install this repo in whichever way you prefer(`Plugin 'lucidstack/ctrl-mpc.vim'`, 
+Knock yourself out and install this repo in whichever way you prefer(`Plugin 'lucidstack/ctrlp-mpc.vim'`, 
 if you are on Vundle like me), then add `'mpc'` to the ctrlp extensions (in your `.vimrc`):
 ```
     let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir', 'tmux', 'mpc'] " <- here it is
