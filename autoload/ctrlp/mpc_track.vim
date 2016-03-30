@@ -23,7 +23,7 @@ call add(g:ctrlp_ext_vars, {
   endfunction
 
   function! ctrlp#mpc_track#init()
-    let com = 'mpc -f "[[%artist% - ]%title%]\t%file%" search Artist "' . g:selected_artist . '"'
+    let com = 'mpc -f "[[%artist% - ]%title%]\t%file%" search Artist ' . shellescape(g:selected_artist)
     let list = systemlist(com)
 
     cal s:syntax()
@@ -34,8 +34,7 @@ call add(g:ctrlp_ext_vars, {
     call ctrlp#exit()
 
     let track = matchstr(a:str, '\t\zs.*$')
-
-    let add_com = 'mpc add ' . track
+    let add_com = 'mpc add ' . shellescape(track)
     silent call system(add_com)
 
     let play_com = 'mpc play $(mpc playlist | wc -l)'
