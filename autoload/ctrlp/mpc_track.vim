@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 if ( exists('g:loaded_ctrlp_mpc_track') && g:loaded_ctrlp_mpc_track ) || v:version < 700 || &cp
   finish
 endif
@@ -6,8 +8,8 @@ let g:loaded_ctrlp_mpc_track = 1
 call add(g:ctrlp_ext_vars, {
   \ 'init': 'ctrlp#mpc_track#init()',
   \ 'accept': 'ctrlp#mpc_track#accept',
-  \ 'lname': 'mpc tracks',
-  \ 'sname': 'mpc tracks',
+  \ 'lname': 'mpctracks',
+  \ 'sname': 'mpctracks',
   \ 'specinput': 0,
   \ 'type': 'tabs',
   \ })
@@ -24,7 +26,7 @@ call add(g:ctrlp_ext_vars, {
 
   function! ctrlp#mpc_track#init()
     let com = 'mpc -f "[[%artist% - ]%title%]\t%file%" search Artist ' . shellescape(g:selected_artist)
-    let list = systemlist(com)
+    let list = map(systemlist(com), 'substitute(v:val, "\r", "", "")')
 
     cal s:syntax()
     return list
@@ -37,10 +39,12 @@ call add(g:ctrlp_ext_vars, {
     let add_com = 'mpc add ' . shellescape(track)
     silent call system(add_com)
 
-    let play_com = 'mpc play $(mpc playlist | wc -l)'
+    let length_com = 'mpc playlist'
+    let length = len(split(system(length_com), '\n'))
+    let play_com = 'mpc play ' . length
     silent call system(play_com)
 
-    echo '♬ Playing ' . system('mpc status | head -1')
+    echo '♬ Playing ' . split(system('mpc status'), '\n')[0]
   endfunction
 
   let s:track_id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
