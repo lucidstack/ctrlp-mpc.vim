@@ -7,7 +7,7 @@ let g:loaded_ctrlp_mpc = 1
 call add(g:ctrlp_ext_vars, {
   \ 'init': 'ctrlp#mpc#init()',
   \ 'accept': 'ctrlp#mpc#accept',
-  \ 'lname': 'mpc artists',
+  \ 'lname': 'mpcartists',
   \ 'sname': 'mpc',
   \ 'type': 'line',
   \ 'specinput': 0,
@@ -18,7 +18,7 @@ call add(g:ctrlp_ext_vars, {
   function! ctrlp#mpc#init()
     if (!exists('g:artists'))
       let com = 'mpc list artist'
-      let g:artists = split(system(com), '\n')
+      let g:artists = split(system(com), '\r*\n')
     endif
 
     return g:artists
