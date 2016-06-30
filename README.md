@@ -1,6 +1,6 @@
 # ctrlp-mpc.vim
 
-There's nothing that breaks my concentration more than having to switch windows and find that 
+There's nothing that breaks my concentration more than having to switch windows and find that
 [Daft Punk tune I *really* want to listen to right now](https://www.youtube.com/watch?v=zhl-Cs1-sG4),
 so...why not ~~Zoidberg~~ ctrlp?
 
@@ -8,7 +8,7 @@ so...why not ~~Zoidberg~~ ctrlp?
 
 ## Installation
 
-Knock yourself out and install this repo in whichever way you prefer(`Plugin 'lucidstack/ctrlp-mpc.vim'`, 
+Knock yourself out and install this repo in whichever way you prefer(`Plugin 'lucidstack/ctrlp-mpc.vim'`,
 if you are on Vundle like me), then add `'mpc'` to the ctrlp extensions (in your `.vimrc`):
 ```
     let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir', 'tmux', 'mpc'] " <- here it is
@@ -17,6 +17,11 @@ and, optionally, a leader shortcut:
 ```
   " Sheer awesomeness
   nnoremap <Leader>m :CtrlPMpc<CR>
+```
+
+If you need to run `mpc` with particular flags (like `--port` or `--host`), you can override the command `ctrlp-mpc` uses for `mpc` in your `.vimrc`:
+```
+  let g:ctrlp_mpc_cmd = 'mpc --port 6682'
 ```
 
 ## je cache, tu caches, il cache
