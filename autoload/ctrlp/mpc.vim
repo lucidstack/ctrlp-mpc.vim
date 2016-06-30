@@ -12,33 +12,35 @@ call add(g:ctrlp_ext_vars, {
   \ 'type': 'line',
   \ 'specinput': 0,
   \ })
-"
-" Artist section
-""""""""""""""""
-  function! ctrlp#mpc#init()
-    if (!exists('g:artists'))
-      let com = 'mpc list artist'
-      let g:artists = split(system(com), '\r*\n')
-    endif
 
-    return g:artists
-  endfunction
+function! ctrlp#mpc#init()
+  if (!exists('g:ctrlp_mpc_cmd'))
+    let g:ctrlp_mpc_cmd = 'mpc'
+  endif
 
-  function! ctrlp#mpc#accept(mode, str)
-    call ctrlp#exit()
+  if (!exists('g:artists'))
+    let com = g:ctrlp_mpc_cmd . ' list artist'
+    let g:artists = split(system(com), '\r*\n')
+  endif
 
-    let g:selected_artist = a:str
-    call ctrlp#init(ctrlp#mpc_track#id())
-  endfunction
+  return g:artists
+endfunction
 
-  let s:artist_id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
-  function! ctrlp#mpc#id()
-    return s:artist_id
-  endfunction
+function! ctrlp#mpc#accept(mode, str)
+  call ctrlp#exit()
 
-  function! ctrlp#mpc#clear_cache()
-    if (exists('g:artists'))
-      unlet g:artists
-    endif
-  endfunction
+  let g:selected_artist = a:str
+  call ctrlp#init(ctrlp#mpc_track#id())
+endfunction
+
+let s:artist_id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
+function! ctrlp#mpc#id()
+  return s:artist_id
+endfunction
+
+function! ctrlp#mpc#clear_cache()
+  if (exists('g:artists'))
+    unlet g:artists
+  endif
+endfunction
 " vim:nofen:fdl=0:ts=2:sw=2:sts=2

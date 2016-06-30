@@ -14,41 +14,42 @@ call add(g:ctrlp_ext_vars, {
   \ 'type': 'tabs',
   \ })
 
-" Track section
-"""""""""""""""
-  " thank you, ctrlpvim/ctrlp.vim/blob/master/autoload/ctrlp/tag.vim! :)
-  function! s:syntax()
-    if !ctrlp#nosy()
-      call ctrlp#hicheck('CtrlPTabExtra', 'Comment')
-      syntax match CtrlPTabExtra '\zs\t.*\ze$'
-    endif
-  endfunction
+" thank you, ctrlpvim/ctrlp.vim/blob/master/autoload/ctrlp/tag.vim! :)
+function! s:syntax()
+  if !ctrlp#nosy()
+    call ctrlp#hicheck('CtrlPTabExtra', 'Comment')
+    syntax match CtrlPTabExtra '\zs\t.*\ze$'
+  endif
+endfunction
 
-  function! ctrlp#mpc_track#init()
-    let com = 'mpc -f "[[%artist% - ]%title%]\t%file%" search Artist ' . shellescape(g:selected_artist)
-    let list = map(systemlist(com), 'substitute(v:val, "\r", "", "")')
+function! ctrlp#mpc_track#init()
+  if (!exists('g:ctrlp_mpc_cmd'))
+    let g:ctrlp_mpc_cmd = 'mpc'
+  endif
 
-    cal s:syntax()
-    return list
-  endfunction
+  let com = g:ctrlp_mpc_cmd . ' -f "[[%artist% - ]%title%]\t%file%" search Artist ' . shellescape(g:selected_artist)
+  let list = map(systemlist(com), 'substitute(v:val, "\r", "", "")')
 
-  function! ctrlp#mpc_track#accept(mode, str)
-    call ctrlp#exit()
+  cal s:syntax()
+  return list
+endfunction
 
-    let track = matchstr(a:str, '\t\zs.*$')
-    let add_com = 'mpc add ' . shellescape(track)
-    silent call system(add_com)
+function! ctrlp#mpc_track#accept(mode, str)
+  call ctrlp#exit()
 
-    let length_com = 'mpc playlist'
-    let length = len(split(system(length_com), '\n'))
-    let play_com = 'mpc play ' . length
-    silent call system(play_com)
+  let track = matchstr(a:str, '\t\zs.*$')
+  let add_com = g:ctrlp_mpc_cmd . ' add ' . shellescape(track)
+  silent call system(add_com)
 
-    echo '♬ Playing ' . split(system('mpc status'), '\n')[0]
-  endfunction
+  let length_com = g:ctrlp_mpc_cmd . ' playlist'
+  let length = len(split(system(length_com), '\n'))
+  let play_com = g:ctrlp_mpc_cmd . ' play ' . length
+  silent call system(play_com)
 
-  let s:track_id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
-  function! ctrlp#mpc_track#id()
-    return s:track_id
-  endfunction
+  echo '♬ Playing ' . split(system(g:ctrlp_mpc_cmd . ' status'), '\n')[0]
+endfunction
 
+let s:track_id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
+function! ctrlp#mpc_track#id()
+  return s:track_id
+endfunction
